@@ -1,35 +1,78 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react"
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+    const [formData, setFormData] = React.useState({
+        email: "",
+        password: "",
+        passwordConfirm: "",
+        joinedNewsletter: true
+    })
+    
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    
+    function handleChange(event) {
+        const {name, value, type, checked} = event.target
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            [name]: type === "checkbox" ? checked : value
+        }))
+    }
+    
+    function handleSubmit(event) {
+        event.preventDefault()
+        if(formData.password === formData.passwordConfirm) {
+            console.log("Successfully signed up")
+        } else {
+            console.log("Passwords do not match")
+            return
+        }
+      
+    }
+    
+    return (
+        <div className="form-container">
+            <form className="form" onSubmit={handleSubmit}>
+                <input 
+                    type="email" 
+                    placeholder="Email address"
+                    className="form--input"
+                    name="email"
+                    onChange={handleChange}
+                    value={formData.email}
+                />
+                <input 
+                    type="password" 
+                    placeholder="Password"
+                    className="form--input"
+                    name="password"
+                    onChange={handleChange}
+                    value={formData.password}
+                />
+                <input 
+                    type="password" 
+                    placeholder="Confirm password"
+                    className="form--input"
+                    name="passwordConfirm"
+                    onChange={handleChange}
+                    value={formData.passwordConfirm}
+                />
+                
+                <div className="form--marketing">
+                    <input
+                        id="okayToEmail"
+                        type="checkbox"
+                        name="joinedNewsletter"
+                        onChange={handleChange}
+                        checked={formData.joinedNewsletter}
+                    />
+                    <label htmlFor="okayToEmail">I want to join the Social-Fusion newsletter</label>
+                </div>
+                <button 
+                    className="form--submit"
+                >
+                    Sign up
+                </button>
+            </form>
+        </div>
+    )
 }
-
-export default App
